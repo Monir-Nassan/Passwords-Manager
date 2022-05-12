@@ -1,6 +1,11 @@
 # Password manager
 Password manager software using the Symmetric AES Cipher for passwords encryption and SHA-256 hash to store The Master Key, Sqlite as a Database, PyQt5 For the Gui
 
+## Login page
+![alt text](https://github.com/Monir-Nassan/Passwords-Manager/blob/main/assets/Longin_page.png?raw=true) 
+## User page
+![alt text](https://github.com/Monir-Nassan/Passwords-Manager/blob/main/assets/User_page.png?raw=true)
+
 
 ## Security
 **Please do Your research on the best way to store passwords.**
@@ -38,6 +43,7 @@ py -m pip install -r requirements.txt
 ```sh
 py app.py
 ```
+
 
 
 
