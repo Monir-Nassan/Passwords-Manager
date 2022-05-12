@@ -104,6 +104,7 @@ class GUI(QMainWindow):
         success, msg = controller.create_account(username, password)
         if not success:
             self.Error.setText(msg)
+        self.Error.setText("Account Created Successfully")
         return
 
     def add_password(self):
