@@ -1,12 +1,30 @@
 import hashlib
+import random
+import string
+
 import db_handler
 import encryption_helper
 
 conn = db_handler.connect('db.db')
 db_handler.check_tables(conn)
 
+letters = string.ascii_letters
+numbers = string.digits
+chars = string.punctuation
+
+language = letters + numbers + chars
+
+
+def generate_password(k=16):
+    password = ''.join(random.choice(language) for _ in range(k))
+    return password
+
 
 def add_password(name, password, key, user):
+    if ' ' in password:
+        return False, 'password can not have spaces'
+    if ' ' in name:
+        return False, 'platform name can not have spaces'
     result = db_handler.query_single_password(conn, user, name)
     if result:
         return False, 'password for this platform already exists'
@@ -47,6 +65,10 @@ def login(username, password):
 
 
 def create_account(username, password):
+    if ' ' in username:
+        return False, "username can't have spaces"
+    if ' ' in password:
+        return False, "password can't have spaces"
     if len(password) > 16:
         return False, 'password must be 16 or less characters'
     check, _ = get_user(username)

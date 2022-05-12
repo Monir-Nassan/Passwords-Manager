@@ -8,6 +8,7 @@ class GUI(QMainWindow):
         super(GUI, self).__init__()
         self.setWindowIcon(QtGui.QIcon('assets/password.png'))
         uic.loadUi("passwords_manager.ui", self)
+        self.setWindowTitle("Password Manager")
         self.pages.setCurrentWidget(self.login_page)
         self.login_btn.clicked.connect(self.login)
         self.create_account_btn.clicked.connect(self.create_account)
@@ -16,10 +17,16 @@ class GUI(QMainWindow):
         self.show_password_btn.clicked.connect(self.reveal_password)
         self.logout_btn.clicked.connect(self.logout)
         self.start_size = (self.size().width(), self.size().height())
+        self.generate_password_btn.clicked.connect(self.generate_password)
         self.current_user = None
         self.password = None
-        self.show()
         self.hidden = True
+        self.show()
+
+    def generate_password(self):
+        k = self.password_length.value()
+        password = controller.generate_password(k)
+        self.generate_password_label.setText(password)
 
     def text_changed(self, s):
         check, results = controller.get_passwords(self.current_user)
@@ -63,10 +70,13 @@ class GUI(QMainWindow):
         if not success:
             self.Error.setText(msg)
             return
+        self.generate_password_label.clear()
+        self.passsword_input.clear()
         self.current_user = username
         self.password = password
         self.resize(790, 611)
         self.pages.setCurrentWidget(self.user_page)
+        self.current_user_label.setText(self.current_user)
         self.update_combo()
 
     def logout(self):
@@ -98,7 +108,7 @@ class GUI(QMainWindow):
 
     def add_password(self):
         input_platform = self.platform_input.text()
-        input_password = self.passsword_input.text()
+        input_password = self.passsword_input.toPlainText()
         self.platform_input.clear()
         self.passsword_input.clear()
         success, msg = controller.add_password(input_platform, input_password, self.password, self.current_user)
@@ -106,6 +116,7 @@ class GUI(QMainWindow):
             self.Error_2.setText(msg)
             return False
         self.update_combo()
+        self.Error_2.setText('Password added')
         return True
 
 
