@@ -18,11 +18,16 @@ class GUI(QMainWindow):
         self.logout_btn.clicked.connect(self.logout)
         self.start_size = (self.size().width(), self.size().height())
         self.generate_password_btn.clicked.connect(self.generate_password)
+        self.delete_btn.clicked.connect(self.delete_password)
         self.current_user = None
         self.password = None
         self.hidden = True
         self.show()
 
+    def delete_password(self):
+        current_platform = self.passwords_combo_box.currentText()
+        controller.delete_password_from_db(current_platform, self.current_user)
+        self.update_combo()
     def generate_password(self):
         k = self.password_length.value()
         password = controller.generate_password(k)
@@ -30,6 +35,9 @@ class GUI(QMainWindow):
 
     def text_changed(self, s):
         check, results = controller.get_passwords(self.current_user)
+        if not check:
+            self.delete_btn.setEnabled(False)
+            return
         for i, password, nonce, tag, user in results:
             if i == s:
                 self.password_label.setText(password.decode('unicode_escape'))
@@ -91,7 +99,11 @@ class GUI(QMainWindow):
     def update_combo(self):
         check, user_passwords = controller.get_passwords(self.current_user)
         if not check:
+            self.passwords_combo_box.clear()
+            self.password_label.clear()
+
             return
+        self.delete_btn.setEnabled(True)
         self.passwords_combo_box.clear()
         self.passwords_combo_box.addItems([i for i, _, _, _, _ in user_passwords])
 

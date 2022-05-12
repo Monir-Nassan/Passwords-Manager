@@ -15,6 +15,10 @@ chars = string.punctuation
 language = letters + numbers + chars
 
 
+def delete_password_from_db(name, username):
+    db_handler.delete_password(conn, name, username)
+
+
 def generate_password(k=16):
     password = ''.join(random.choice(language) for _ in range(k))
     return password
