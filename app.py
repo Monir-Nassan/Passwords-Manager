@@ -7,7 +7,7 @@ class GUI(QMainWindow):
     def __init__(self):
         super(GUI, self).__init__()
         self.setWindowIcon(QtGui.QIcon('assets/password.png'))
-        uic.loadUi("passwords_manager.ui", self)
+        uic.loadUi("./UI/passwords_manager.ui", self)
         self.setWindowTitle("Password Manager")
         self.pages.setCurrentWidget(self.login_page)
         self.login_btn.clicked.connect(self.login)
