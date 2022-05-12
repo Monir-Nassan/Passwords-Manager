@@ -18,6 +18,13 @@ def check_tables(conn):
         create_passwords_table(conn)
 
 
+def delete_password(conn, name, username):
+    curr = conn.cursor()
+    x = curr.execute('delete from passwords where name=:name and user=:username',{'name':name,
+                                                                              'username':username})
+
+    conn.commit()
+
 def create_users_table(con):
     cur = con.cursor()
     cur.execute('''CREATE TABLE users
