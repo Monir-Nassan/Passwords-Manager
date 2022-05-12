@@ -19,6 +19,7 @@ class GUI(QMainWindow):
         self.current_user = None
         self.password = None
         self.show()
+        self.hidden = True
 
     def text_changed(self, s):
         check, results = controller.get_passwords(self.current_user)
@@ -27,6 +28,9 @@ class GUI(QMainWindow):
                 self.password_label.setText(password.decode('unicode_escape'))
 
     def reveal_password(self):
+        if not self.hidden:
+            self.hide_password()
+            return
         s = self.passwords_combo_box.currentText()
         check, results = controller.get_passwords(self.current_user)
         if not check:
@@ -37,6 +41,17 @@ class GUI(QMainWindow):
                 if not check:
                     self.Error_2.setText(rev_password)
                 self.password_label.setText(rev_password)
+                self.show_password_btn.setText('Hide password')
+                self.hidden = False
+
+    def hide_password(self):
+        s = self.passwords_combo_box.currentText()
+        check, results = controller.get_passwords(self.current_user)
+        for i, password, nonce, tag, user in results:
+            if i == s:
+                self.password_label.setText(password.decode('unicode_escape'))
+                self.show_password_btn.setText('Show password')
+                self.hidden = True
 
     def login(self):
         username = self.login_username_input.text()
