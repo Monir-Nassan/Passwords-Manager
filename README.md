@@ -10,7 +10,7 @@ Password manager software using the Symmetric AES Cipher for passwords encryptio
 ## Security
 **Please do Your research on the best way to store passwords.**
 
-The software is completely offline and even if Some got the database it's completely useless it works as follows :
+The software is completely offline and even if Someone got access to the database it's completely useless, it works as follows :
 
 - The MasterKey used for the encryption is the password You provide to create The account
 - The Masterkey hash is stored in the database.
