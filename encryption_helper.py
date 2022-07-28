@@ -26,5 +26,5 @@ def decrypt(key, encrypted_text, iv):
 
 
 def generate_iv():
-    return get_random_bytes(16)
+    return get_random_bytes(AES.block_size)
 

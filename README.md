@@ -1,5 +1,5 @@
 # Password manager
-Password manager software using the Symmetric AES Cipher for passwords encryption and SHA-256 hash to store The Master Key, Sqlite as a Database, PyQt5 For the Gui
+Password manager software using the Symmetric AES CBC_MODE Cipher (Ciphertext Block Chaining) for passwords encryption and SHA-256 hash to store The Master Key, Sqlite as a Database, PyQt5 For the Gui
 
 ## Login page
 ![alt text](https://github.com/Monir-Nassan/Passwords-Manager/blob/main/assets/Longin_page.png?raw=true) 
@@ -15,6 +15,8 @@ The software is completely offline and even if Someone got access to the databas
 - The MasterKey used for the encryption is the password You provide to create The account
 - The Masterkey hash is stored in the database.
 - when logging in The hash of the Masterkey provided is being evaluated with the hash stored in the database.
+- IV (Initialization Vector) is being generated for each password and stored in the DB.
+
 **The issue here is The Masterkey is being stored in memory, so the app can use it for the encryption/decryption of the passwords. Improvements are incoming! If you have any suggestions Please PR**
 
 ## Installation
