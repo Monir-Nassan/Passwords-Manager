@@ -27,8 +27,7 @@ def generate_password(k=16):
 def add_password(name, password, key, user):
     if ' ' in password:
         return False, 'password can not have spaces'
-    if ' ' in name:
-        return False, 'platform name can not have spaces'
+
     result = db_handler.query_single_password(conn, user, name)
     if result:
         return False, 'password for this platform already exists'
@@ -37,8 +36,8 @@ def add_password(name, password, key, user):
     if len(password) < 6:
         return False, 'password is too short'
 
-    nonce, cipertext, tag = encryption_helper.encrypt(key.encode(), password)
-    db_handler.add_password(conn, name, cipertext, nonce, tag, user)
+    encrypted_text, iv = encryption_helper.encrypt(key.encode(), password)
+    db_handler.add_password(conn, name, encrypted_text, iv, user)
     return True, ''
 
 
@@ -49,11 +48,10 @@ def get_passwords(username):
     return True, passwords
 
 
-def reveal_password(passwordHash, nonce, tag, key):
-    check, text = encryption_helper.decrypt(key.encode(), passwordHash, nonce, tag)
-    if not check:
-        return False, text
-    return True, text.decode()
+def reveal_password(passwordHash, key, iv):
+    text = encryption_helper.decrypt(passwordHash, key, iv)
+
+    return text.decode()
 
 
 def login(username, password):

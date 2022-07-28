@@ -36,8 +36,7 @@ def create_passwords_table(con):
     cur.execute('''CREATE TABLE passwords
                    (name text, 
                    password text, 
-                   nonce text, 
-                   tag text, 
+                   iv text, 
                    user text,
                    FOREIGN KEY (user)
                    REFERENCES users (username) )''')
@@ -72,9 +71,8 @@ def get_user_passwords(con: Connection, username):
 def add_password(con: Connection,
                  name,
                  password,
-                 nonce,
-                 tag,
+                 iv,
                  user):
     cur = con.cursor()
-    cur.execute("INSERT INTO passwords VALUES (?, ?, ?, ?, ?)", (name, password, nonce, tag, user))
+    cur.execute("INSERT INTO passwords VALUES (?, ?, ?, ?)", (name, password, iv, user))
     con.commit()

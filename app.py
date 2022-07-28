@@ -28,6 +28,7 @@ class GUI(QMainWindow):
         current_platform = self.passwords_combo_box.currentText()
         controller.delete_password_from_db(current_platform, self.current_user)
         self.update_combo()
+
     def generate_password(self):
         k = self.password_length.value()
         password = controller.generate_password(k)
@@ -38,7 +39,7 @@ class GUI(QMainWindow):
         if not check:
             self.delete_btn.setEnabled(False)
             return
-        for i, password, nonce, tag, user in results:
+        for i, password, iv, user in results:
             if i == s:
                 self.password_label.setText(password.decode('unicode_escape'))
 
@@ -50,9 +51,9 @@ class GUI(QMainWindow):
         check, results = controller.get_passwords(self.current_user)
         if not check:
             return
-        for i, password, nonce, tag, user in results:
+        for i, password, iv, user in results:
             if i == s:
-                check, rev_password = controller.reveal_password(password, nonce, tag, self.password)
+                rev_password = controller.reveal_password(self.password, password, iv)
                 if not check:
                     self.Error_2.setText(rev_password)
                 self.password_label.setText(rev_password)
@@ -62,7 +63,7 @@ class GUI(QMainWindow):
     def hide_password(self):
         s = self.passwords_combo_box.currentText()
         check, results = controller.get_passwords(self.current_user)
-        for i, password, nonce, tag, user in results:
+        for i, password, iv, user in results:
             if i == s:
                 self.password_label.setText(password.decode('unicode_escape'))
                 self.show_password_btn.setText('Show password')
@@ -105,7 +106,7 @@ class GUI(QMainWindow):
             return
         self.delete_btn.setEnabled(True)
         self.passwords_combo_box.clear()
-        self.passwords_combo_box.addItems([i for i, _, _, _, _ in user_passwords])
+        self.passwords_combo_box.addItems([i for i, _, _, _ in user_passwords])
 
     def create_account(self):
         username = self.login_username_input.text()
